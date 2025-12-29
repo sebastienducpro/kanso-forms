@@ -1,1 +1,1062 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Audit Kanso 360 - Diagnostic Gratuit</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --violet-primary: #8B5CF6;
+            --violet-dark: #6D28D9;
+            --violet-glow: rgba(139, 92, 246, 0.4);
+            --noir-deep: #0D0D15;
+            --noir-card: #1A1A2E;
+            --noir-input: #252538;
+            --gris-text: #A0A0B2;
+            --gris-border: #3A3A50;
+            --blanc: #FFFFFF;
+            --rouge: #EF4444;
+            --vert: #10B981;
+        }
 
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, sans-serif;
+            background: var(--noir-deep);
+            color: var(--blanc);
+            min-height: 100vh;
+            padding: 40px 20px;
+        }
+
+        .container {
+            max-width: 700px;
+            margin: 0 auto;
+        }
+
+        /* Header */
+        .header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .header h1 {
+            font-size: 2.5rem;
+            font-weight: 800;
+            color: var(--violet-primary);
+            margin-bottom: 12px;
+        }
+
+        .header p {
+            font-size: 1.1rem;
+            color: var(--gris-text);
+        }
+
+        .badge {
+            display: inline-block;
+            background: rgba(139, 92, 246, 0.15);
+            border: 1px solid var(--violet-primary);
+            color: var(--violet-primary);
+            padding: 8px 20px;
+            border-radius: 50px;
+            font-size: 0.85rem;
+            font-weight: 500;
+            margin-bottom: 20px;
+        }
+
+        /* Progress */
+        .progress-container {
+            margin-bottom: 30px;
+        }
+
+        .progress-bar {
+            height: 4px;
+            background: var(--gris-border);
+            border-radius: 2px;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--violet-dark), var(--violet-primary));
+            transition: width 0.3s ease;
+        }
+
+        .progress-text {
+            text-align: center;
+            margin-top: 10px;
+            color: var(--gris-text);
+            font-size: 0.9rem;
+        }
+
+        /* Form Card */
+        .form-card {
+            background: var(--noir-card);
+            border: 1px solid var(--gris-border);
+            border-radius: 16px;
+            padding: 40px;
+        }
+
+        /* Steps */
+        .step {
+            display: none;
+        }
+
+        .step.active {
+            display: block;
+            animation: fadeIn 0.3s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .step-title {
+            font-size: 1.3rem;
+            font-weight: 600;
+            margin-bottom: 30px;
+            color: var(--blanc);
+        }
+
+        .step-title span {
+            color: var(--violet-primary);
+        }
+
+        /* Form Groups */
+        .form-group {
+            margin-bottom: 24px;
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+
+        @media (max-width: 600px) {
+            .form-row { grid-template-columns: 1fr; }
+        }
+
+        label {
+            display: block;
+            font-size: 0.9rem;
+            font-weight: 500;
+            color: var(--gris-text);
+            margin-bottom: 8px;
+        }
+
+        label .required {
+            color: var(--violet-primary);
+        }
+
+        /* Inputs */
+        input[type="text"],
+        input[type="email"],
+        input[type="tel"],
+        select,
+        textarea {
+            width: 100%;
+            padding: 14px 16px;
+            background: var(--noir-input);
+            border: 1px solid var(--gris-border);
+            border-radius: 10px;
+            color: var(--blanc);
+            font-size: 1rem;
+            font-family: inherit;
+            transition: all 0.2s ease;
+        }
+
+        input:focus,
+        select:focus,
+        textarea:focus {
+            outline: none;
+            border-color: var(--violet-primary);
+            box-shadow: 0 0 0 3px var(--violet-glow);
+        }
+
+        input::placeholder,
+        textarea::placeholder {
+            color: var(--gris-text);
+            opacity: 0.6;
+        }
+
+        select {
+            cursor: pointer;
+            appearance: none;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='%23A0A0B2' stroke-width='2'%3E%3Cpolyline points='6,9 12,15 18,9'%3E%3C/polyline%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-position: right 12px center;
+            background-size: 18px;
+            padding-right: 40px;
+        }
+
+        textarea {
+            resize: vertical;
+            min-height: 100px;
+        }
+
+        /* Slider */
+        .slider-container {
+            margin-top: 10px;
+        }
+
+        .slider-labels {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 8px;
+            font-size: 0.75rem;
+            color: var(--gris-text);
+        }
+
+        input[type="range"] {
+            width: 100%;
+            height: 8px;
+            background: var(--noir-input);
+            border-radius: 4px;
+            outline: none;
+            -webkit-appearance: none;
+        }
+
+        input[type="range"]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            width: 24px;
+            height: 24px;
+            background: var(--violet-primary);
+            border-radius: 50%;
+            cursor: pointer;
+            box-shadow: 0 0 10px var(--violet-glow);
+        }
+
+        .slider-value {
+            text-align: center;
+            margin-top: 12px;
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--violet-primary);
+        }
+
+        .slider-description {
+            text-align: center;
+            margin-top: 8px;
+            font-size: 0.85rem;
+            color: var(--gris-text);
+        }
+
+        /* Checkboxes Grid */
+        .checkbox-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 12px;
+            margin-top: 10px;
+        }
+
+        @media (max-width: 600px) {
+            .checkbox-grid { grid-template-columns: 1fr; }
+        }
+
+        .checkbox-item {
+            display: flex;
+            align-items: center;
+            padding: 12px 16px;
+            background: var(--noir-input);
+            border: 1px solid var(--gris-border);
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .checkbox-item:hover {
+            border-color: var(--violet-primary);
+        }
+
+        .checkbox-item.selected {
+            border-color: var(--violet-primary);
+            background: rgba(139, 92, 246, 0.1);
+        }
+
+        .checkbox-item input {
+            display: none;
+        }
+
+        .checkbox-custom {
+            width: 20px;
+            height: 20px;
+            border: 2px solid var(--gris-border);
+            border-radius: 4px;
+            margin-right: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.2s ease;
+        }
+
+        .checkbox-item.selected .checkbox-custom {
+            background: var(--violet-primary);
+            border-color: var(--violet-primary);
+        }
+
+        .checkbox-custom::after {
+            content: "✓";
+            color: white;
+            font-size: 12px;
+            font-weight: bold;
+            opacity: 0;
+            transition: opacity 0.2s ease;
+        }
+
+        .checkbox-item.selected .checkbox-custom::after {
+            opacity: 1;
+        }
+
+        .checkbox-label {
+            font-size: 0.9rem;
+            color: var(--blanc);
+        }
+
+        .tools-count {
+            text-align: center;
+            margin-top: 16px;
+            padding: 12px;
+            background: var(--noir-input);
+            border-radius: 10px;
+            font-size: 0.9rem;
+            color: var(--gris-text);
+        }
+
+        .tools-count strong {
+            color: var(--violet-primary);
+        }
+
+        /* Conditional Fields */
+        .conditional-field {
+            display: none;
+            margin-top: 16px;
+            padding-top: 16px;
+            border-top: 1px solid var(--gris-border);
+        }
+
+        .conditional-field.visible {
+            display: block;
+            animation: fadeIn 0.3s ease;
+        }
+
+        /* Buttons */
+        .btn-container {
+            display: flex;
+            gap: 16px;
+            margin-top: 30px;
+        }
+
+        .btn {
+            flex: 1;
+            padding: 16px 24px;
+            border: none;
+            border-radius: 10px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            font-family: inherit;
+        }
+
+        .btn-secondary {
+            background: var(--noir-input);
+            color: var(--gris-text);
+            border: 1px solid var(--gris-border);
+        }
+
+        .btn-secondary:hover {
+            background: var(--gris-border);
+            color: var(--blanc);
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--violet-dark), var(--violet-primary));
+            color: var(--blanc);
+            box-shadow: 0 4px 15px var(--violet-glow);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px var(--violet-glow);
+        }
+
+        .btn-primary:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        /* Validation */
+        .form-group.error input,
+        .form-group.error select,
+        .form-group.error textarea {
+            border-color: var(--rouge);
+            box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.2);
+        }
+
+        .form-group.error label {
+            color: var(--rouge);
+        }
+
+        .error-message {
+            color: var(--rouge);
+            font-size: 0.8rem;
+            margin-top: 6px;
+            display: none;
+        }
+
+        .form-group.error .error-message {
+            display: block;
+        }
+
+        /* Loading */
+        .loading {
+            display: none;
+            text-align: center;
+            padding: 40px;
+        }
+
+        .loading.active {
+            display: block;
+        }
+
+        .spinner {
+            width: 50px;
+            height: 50px;
+            border: 3px solid var(--gris-border);
+            border-top-color: var(--violet-primary);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 20px;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        /* Success */
+        .success-message {
+            display: none;
+            text-align: center;
+            padding: 40px;
+        }
+
+        .success-message.active {
+            display: block;
+        }
+
+        .success-icon {
+            width: 80px;
+            height: 80px;
+            background: var(--vert);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 20px;
+            font-size: 2rem;
+        }
+
+        .success-message h2 {
+            color: var(--blanc);
+            margin-bottom: 12px;
+        }
+
+        .success-message p {
+            color: var(--gris-text);
+        }
+
+        /* Info Box */
+        .info-box {
+            background: rgba(139, 92, 246, 0.1);
+            border: 1px solid var(--violet-primary);
+            border-radius: 10px;
+            padding: 16px;
+            margin-bottom: 24px;
+            font-size: 0.85rem;
+            color: var(--gris-text);
+        }
+
+        .info-box strong {
+            color: var(--violet-primary);
+        }
+
+        /* Honeypot - invisible pour les humains */
+        .hp-field {
+            position: absolute;
+            left: -9999px;
+            top: -9999px;
+            opacity: 0;
+            pointer-events: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header class="header">
+            <h1>Audit Kanso 360</h1>
+            <p>Calculez le coût caché de vos processus en 5 minutes</p>
+            <div class="badge">✨ Diagnostic gratuit</div>
+        </header>
+
+        <div class="progress-container">
+            <div class="progress-bar">
+                <div class="progress-fill" id="progressFill" style="width: 14%"></div>
+            </div>
+            <p class="progress-text"><span id="currentStep">1</span> / 7 étapes</p>
+        </div>
+
+        <div class="form-card">
+            <form id="auditForm">
+
+                <!-- HONEYPOT ANTI-BOT - Invisible pour les humains -->
+                <div class="hp-field">
+                    <label for="website">Website</label>
+                    <input type="text" name="website" id="website" tabindex="-1" autocomplete="off">
+                </div>
+
+                <!-- ÉTAPE 1: Coordonnées -->
+                <div class="step active" data-step="1">
+                    <h2 class="step-title"><span>01.</span> Vos coordonnées</h2>
+                    
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>Prénom <span class="required">*</span></label>
+                            <input type="text" name="first_name" placeholder="Jean" required>
+                            <p class="error-message">Veuillez renseigner ce champ</p>
+                        </div>
+                        <div class="form-group">
+                            <label>Nom <span class="required">*</span></label>
+                            <input type="text" name="last_name" placeholder="Dupont" required>
+                            <p class="error-message">Veuillez renseigner ce champ</p>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Email professionnel <span class="required">*</span></label>
+                        <input type="email" name="email" placeholder="vous@entreprise.com" required>
+                        <p class="error-message">Email professionnel requis (pas de gmail, hotmail...)</p>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Téléphone</label>
+                        <input type="tel" name="phone" placeholder="+33 6 12 34 56 78">
+                    </div>
+
+                    <div class="btn-container">
+                        <button type="button" class="btn btn-primary" onclick="nextStep()">Continuer →</button>
+                    </div>
+                </div>
+
+                <!-- ÉTAPE 2: Entreprise -->
+                <div class="step" data-step="2">
+                    <h2 class="step-title"><span>02.</span> Votre entreprise</h2>
+
+                    <div class="form-group">
+                        <label>Nom de l'entreprise <span class="required">*</span></label>
+                        <input type="text" name="company_name" placeholder="Acme Industries" required>
+                        <p class="error-message">Veuillez renseigner ce champ</p>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>Secteur d'activité <span class="required">*</span></label>
+                            <select name="industry" required>
+                                <option value="">Sélectionnez...</option>
+                                <option value="Industrie manufacturière">Industrie manufacturière</option>
+                                <option value="Agroalimentaire">Agroalimentaire</option>
+                                <option value="Luxe & Cosmétiques">Luxe & Cosmétiques</option>
+                                <option value="Distribution & Retail">Distribution & Retail</option>
+                                <option value="BTP & Construction">BTP & Construction</option>
+                                <option value="Énergie & Utilities">Énergie & Utilities</option>
+                                <option value="Transport & Logistique">Transport & Logistique</option>
+                                <option value="Pharma & Santé">Pharma & Santé</option>
+                                <option value="Services B2B">Services B2B</option>
+                                <option value="Autre">Autre</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>Effectif <span class="required">*</span></label>
+                            <select name="company_size" required>
+                                <option value="">Sélectionnez...</option>
+                                <option value="1-10 salariés">1-10 salariés</option>
+                                <option value="11-50 salariés">11-50 salariés</option>
+                                <option value="51-200 salariés">51-200 salariés</option>
+                                <option value="201-500 salariés">201-500 salariés</option>
+                                <option value="500+ salariés">500+ salariés</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="form-group" id="industryOtherGroup" style="display: none;">
+                        <label>Précisez votre secteur <span class="required">*</span></label>
+                        <input type="text" name="industry_other" placeholder="Ex: Aéronautique">
+                    </div>
+
+                    <div class="form-group">
+                        <label>Votre fonction <span class="required">*</span></label>
+                        <select name="role" required>
+                            <option value="">Sélectionnez...</option>
+                            <option value="Direction Générale">Direction Générale / CEO / COO</option>
+                            <option value="Finance / DAF">Finance / DAF / Comptabilité</option>
+                            <option value="Achats / Supply Chain">Achats / Supply Chain / Procurement</option>
+                            <option value="Tech / DSI">Tech / DSI / IT</option>
+                            <option value="Autre">Autre</option>
+                        </select>
+                    </div>
+
+                    <div class="btn-container">
+                        <button type="button" class="btn btn-secondary" onclick="prevStep()">← Retour</button>
+                        <button type="button" class="btn btn-primary" onclick="nextStep()">Continuer →</button>
+                    </div>
+                </div>
+
+                <!-- ÉTAPE 3: Écosystème Tech -->
+                <div class="step" data-step="3">
+                    <h2 class="step-title"><span>03.</span> Votre écosystème technologique</h2>
+
+                    <div class="form-group">
+                        <label>Quel est votre ERP principal ? <span class="required">*</span></label>
+                        <select name="erp_type" required>
+                            <option value="">Sélectionnez...</option>
+                            <option value="SAP">SAP</option>
+                            <option value="Oracle">Oracle</option>
+                            <option value="Sage">Sage (X3, 100, etc.)</option>
+                            <option value="Cegid">Cegid</option>
+                            <option value="Microsoft Dynamics">Microsoft Dynamics</option>
+                            <option value="Odoo">Odoo</option>
+                            <option value="ERP Métier">ERP Métier / Spécialisé</option>
+                            <option value="Excel / Pas d'ERP">Excel / Pas d'ERP structuré</option>
+                            <option value="Autre">Autre</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group" id="erpOtherGroup" style="display: none;">
+                        <label>Précisez votre ERP <span class="required">*</span></label>
+                        <input type="text" name="erp_other" placeholder="Ex: Infor, IFS, etc.">
+                    </div>
+
+                    <div class="form-group">
+                        <label>À quel point exploitez-vous votre ERP ?</label>
+                        <div class="slider-container">
+                            <div class="slider-labels">
+                                <span>Basique<br>(Compta seulement)</span>
+                                <span>Cockpit central<br>(Tout intégré)</span>
+                            </div>
+                            <input type="range" name="erp_mastery" min="1" max="10" value="5" id="erpSlider">
+                            <div class="slider-value" id="erpValue">5</div>
+                            <div class="slider-description" id="erpDescription">Utilisation partielle — quelques modules exploités</div>
+                        </div>
+                    </div>
+
+                    <div class="btn-container">
+                        <button type="button" class="btn btn-secondary" onclick="prevStep()">← Retour</button>
+                        <button type="button" class="btn btn-primary" onclick="nextStep()">Continuer →</button>
+                    </div>
+                </div>
+
+                <!-- ÉTAPE 4: Outils -->
+                <div class="step" data-step="4">
+                    <h2 class="step-title"><span>04.</span> Vos outils au quotidien</h2>
+
+                    <div class="info-box">
+                        <strong>💡 Pourquoi cette question ?</strong> Plus vous avez d'outils, plus les données sont fragmentées et les ressaisies fréquentes. C'est un indicateur clé de maturité.
+                    </div>
+
+                    <div class="form-group">
+                        <label>Quels outils utilisez-vous en plus de l'ERP ? <span class="required">*</span></label>
+                        <div class="checkbox-grid" id="toolsGrid">
+                            <label class="checkbox-item" data-tool="Notes de frais">
+                                <input type="checkbox" name="tools_used" value="Notes de frais (N2F, Concur...)">
+                                <span class="checkbox-custom"></span>
+                                <span class="checkbox-label">Notes de frais (N2F, Concur...)</span>
+                            </label>
+                            <label class="checkbox-item" data-tool="Procurement">
+                                <input type="checkbox" name="tools_used" value="Procurement (Coupa, Ivalua...)">
+                                <span class="checkbox-custom"></span>
+                                <span class="checkbox-label">Procurement (Coupa, Ivalua...)</span>
+                            </label>
+                            <label class="checkbox-item" data-tool="Conformité">
+                                <input type="checkbox" name="tools_used" value="Conformité (Provigis, E-attestation...)">
+                                <span class="checkbox-custom"></span>
+                                <span class="checkbox-label">Conformité (Provigis...)</span>
+                            </label>
+                            <label class="checkbox-item" data-tool="CRM">
+                                <input type="checkbox" name="tools_used" value="CRM (Salesforce, HubSpot...)">
+                                <span class="checkbox-custom"></span>
+                                <span class="checkbox-label">CRM (Salesforce, HubSpot...)</span>
+                            </label>
+                            <label class="checkbox-item" data-tool="Gestion projet">
+                                <input type="checkbox" name="tools_used" value="Gestion projet (Monday, Asana...)">
+                                <span class="checkbox-custom"></span>
+                                <span class="checkbox-label">Gestion projet (Monday...)</span>
+                            </label>
+                            <label class="checkbox-item" data-tool="Signature">
+                                <input type="checkbox" name="tools_used" value="Signature (DocuSign, Yousign...)">
+                                <span class="checkbox-custom"></span>
+                                <span class="checkbox-label">Signature (DocuSign...)</span>
+                            </label>
+                            <label class="checkbox-item" data-tool="GED">
+                                <input type="checkbox" name="tools_used" value="GED / Stockage (SharePoint, Drive...)">
+                                <span class="checkbox-custom"></span>
+                                <span class="checkbox-label">GED (SharePoint, Drive...)</span>
+                            </label>
+                            <label class="checkbox-item" data-tool="BI">
+                                <input type="checkbox" name="tools_used" value="BI / Reporting (Power BI, Tableau...)">
+                                <span class="checkbox-custom"></span>
+                                <span class="checkbox-label">BI (Power BI, Tableau...)</span>
+                            </label>
+                            <label class="checkbox-item" data-tool="Excel">
+                                <input type="checkbox" name="tools_used" value="Excel / Google Sheets (intensif)">
+                                <span class="checkbox-custom"></span>
+                                <span class="checkbox-label">Excel / Sheets (intensif)</span>
+                            </label>
+                            <label class="checkbox-item" data-tool="Autre">
+                                <input type="checkbox" name="tools_used" value="Autres outils métiers">
+                                <span class="checkbox-custom"></span>
+                                <span class="checkbox-label">Autres outils métiers</span>
+                            </label>
+                        </div>
+                        <div class="tools-count" id="toolsCount">
+                            <strong>0</strong> outil(s) sélectionné(s) — Écosystème centralisé
+                        </div>
+                    </div>
+
+                    <div class="btn-container">
+                        <button type="button" class="btn btn-secondary" onclick="prevStep()">← Retour</button>
+                        <button type="button" class="btn btn-primary" onclick="nextStep()">Continuer →</button>
+                    </div>
+                </div>
+
+                <!-- ÉTAPE 5: Équipe & Charge -->
+                <div class="step" data-step="5">
+                    <h2 class="step-title"><span>05.</span> Votre équipe & charge admin</h2>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>Taille de l'équipe impactée <span class="required">*</span></label>
+                            <select name="team_size" required>
+                                <option value="">Sélectionnez...</option>
+                                <option value="1">1 personne (moi seul)</option>
+                                <option value="2">2 personnes</option>
+                                <option value="3">3-5 personnes</option>
+                                <option value="7">6-10 personnes</option>
+                                <option value="15">11-20 personnes</option>
+                                <option value="25">20+ personnes</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>Temps admin par JOUR / personne <span class="required">*</span></label>
+                            <select name="hours_lost" required>
+                                <option value="">Sélectionnez...</option>
+                                <option value="< 30 min (ponctuel)">< 30 min (ponctuel)</option>
+                                <option value="~1h (quotidien léger)">~1h (quotidien léger)</option>
+                                <option value="~2h (quotidien significatif)">~2h (quotidien significatif)</option>
+                                <option value="3-4h (demi-journée)">3-4h (demi-journée !)</option>
+                                <option value="> 4h (quasi temps plein)">> 4h (quasi temps plein)</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Nombre de fournisseurs actifs <span class="required">*</span></label>
+                        <select name="data_volume" required>
+                            <option value="">Sélectionnez...</option>
+                            <option value="50">Moins de 50</option>
+                            <option value="100">50 - 100</option>
+                            <option value="300">100 - 500</option>
+                            <option value="750">500 - 1 000</option>
+                            <option value="1500">1 000 - 2 000</option>
+                            <option value="3000">Plus de 2 000</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Fiabilité de votre base fournisseurs <span class="required">*</span></label>
+                        <select name="data_confidence" required>
+                            <option value="">Sélectionnez...</option>
+                            <option value="Fiable — Référentiel unique et à jour">Fiable — Référentiel unique et à jour</option>
+                            <option value="Partielle — Quelques doublons/obsolètes">Partielle — Quelques doublons/obsolètes</option>
+                            <option value="Non maîtrisée — Chacun son Excel">Non maîtrisée — Chacun son Excel</option>
+                        </select>
+                    </div>
+
+                    <div class="btn-container">
+                        <button type="button" class="btn btn-secondary" onclick="prevStep()">← Retour</button>
+                        <button type="button" class="btn btn-primary" onclick="nextStep()">Continuer →</button>
+                    </div>
+                </div>
+
+                <!-- ÉTAPE 6: Douleurs -->
+                <div class="step" data-step="6">
+                    <h2 class="step-title"><span>06.</span> Vos douleurs actuelles</h2>
+
+                    <div class="form-group">
+                        <label>Quel process vous fait perdre le plus de temps ? <span class="required">*</span></label>
+                        <select name="pain_point" required>
+                            <option value="">Sélectionnez...</option>
+                            <option value="Traitement des factures">Traitement des factures / Rapprochement</option>
+                            <option value="Gestion des litiges">Gestion des litiges fournisseurs</option>
+                            <option value="Suivi des délais de livraison">Suivi des délais de livraison / Relances</option>
+                            <option value="Onboarding fournisseurs">Onboarding / Création fournisseurs</option>
+                            <option value="Mise à jour données fournisseurs">Mise à jour des données fournisseurs</option>
+                            <option value="Recherche de nouveaux fournisseurs">Sourcing / Recherche de fournisseurs</option>
+                            <option value="Reporting et consolidation">Reporting / Consolidation de données</option>
+                            <option value="Conformité et audits">Conformité / Préparation des audits</option>
+                            <option value="Autre">Autre</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group" id="painOtherGroup" style="display: none;">
+                        <label>Précisez votre problème principal <span class="required">*</span></label>
+                        <input type="text" name="pain_point_other" placeholder="Décrivez en quelques mots...">
+                    </div>
+
+                    <div class="form-group">
+                        <label>Si vous aviez une baguette magique, que changeriez-vous ?</label>
+                        <textarea name="dream_feature" placeholder="Ex: Que toutes les factures soient rapprochées automatiquement..."></textarea>
+                    </div>
+
+                    <div class="btn-container">
+                        <button type="button" class="btn btn-secondary" onclick="prevStep()">← Retour</button>
+                        <button type="button" class="btn btn-primary" onclick="nextStep()">Continuer →</button>
+                    </div>
+                </div>
+
+                <!-- ÉTAPE 7: Timeline -->
+                <div class="step" data-step="7">
+                    <h2 class="step-title"><span>07.</span> Votre horizon de décision</h2>
+
+                    <div class="form-group">
+                        <label>Quand souhaitez-vous passer à l'action ? <span class="required">*</span></label>
+                        <select name="timeline" required>
+                            <option value="">Sélectionnez...</option>
+                            <option value="C'était pour hier">C'était pour hier — Urgence absolue</option>
+                            <option value="Ce trimestre">Ce trimestre — Budget débloqué</option>
+                            <option value="Cette année — réflexion en cours">Cette année — Réflexion en cours</option>
+                            <option value="Je me renseigne pour plus tard">Je me renseigne pour plus tard</option>
+                        </select>
+                    </div>
+
+                    <input type="hidden" name="source" value="leadmagnet">
+                    <input type="hidden" name="submitted_at" id="submittedAt">
+
+                    <div class="btn-container">
+                        <button type="button" class="btn btn-secondary" onclick="prevStep()">← Retour</button>
+                        <button type="submit" class="btn btn-primary">Recevoir mon diagnostic →</button>
+                    </div>
+                </div>
+
+                <!-- Loading -->
+                <div class="loading" id="loading">
+                    <div class="spinner"></div>
+                    <p>Analyse en cours...</p>
+                    <p style="font-size: 0.85rem; color: var(--gris-text); margin-top: 10px;">Calcul de votre score de maturité</p>
+                </div>
+
+                <!-- Success -->
+                <div class="success-message" id="success">
+                    <div class="success-icon">✓</div>
+                    <h2>Diagnostic envoyé !</h2>
+                    <p>Vous allez recevoir votre rapport personnalisé par email dans quelques instants.</p>
+                </div>
+
+            </form>
+        </div>
+    </div>
+
+    <script>
+        let currentStep = 1;
+        const totalSteps = 7;
+
+        // Navigation
+        function nextStep() {
+            if (!validateStep(currentStep)) return;
+            if (currentStep < totalSteps) {
+                document.querySelector("[data-step='" + currentStep + "']").classList.remove('active');
+                currentStep++;
+                document.querySelector("[data-step='" + currentStep + "']").classList.add('active');
+                updateProgress();
+            }
+        }
+
+        function prevStep() {
+            if (currentStep > 1) {
+                document.querySelector("[data-step='" + currentStep + "']").classList.remove('active');
+                currentStep--;
+                document.querySelector("[data-step='" + currentStep + "']").classList.add('active');
+                updateProgress();
+            }
+        }
+
+        function updateProgress() {
+            const progress = (currentStep / totalSteps) * 100;
+            document.getElementById('progressFill').style.width = progress + "%";
+            document.getElementById('currentStep').textContent = currentStep;
+        }
+
+        // Validation
+        function validateStep(step) {
+            const stepEl = document.querySelector("[data-step='" + step + "']");
+            const inputs = stepEl.querySelectorAll('input[required], select[required], textarea[required]');
+            let isValid = true;
+
+            inputs.forEach(input => {
+                const formGroup = input.closest('.form-group');
+                if (!input.value.trim()) {
+                    formGroup.classList.add('error');
+                    isValid = false;
+                } else {
+                    formGroup.classList.remove('error');
+                }
+            });
+
+            // Email validation
+            const emailInput = stepEl.querySelector('input[name="email"]');
+            if (emailInput && emailInput.value) {
+                const blockedDomains = ['gmail', 'hotmail', 'outlook', 'yahoo', 'orange', 'free', 'wanadoo', 'live', 'icloud', 'msn', 'aol', 'mail', 'protonmail', 'laposte', 'sfr', 'bbox'];
+                const emailDomain = emailInput.value.split('@')[1]?.toLowerCase() || '';
+                const isBlocked = blockedDomains.some(d => emailDomain.includes(d));
+                if (isBlocked) {
+                    emailInput.closest('.form-group').classList.add('error');
+                    isValid = false;
+                }
+            }
+
+            return isValid;
+        }
+
+        // Conditional fields
+        document.querySelector('select[name="industry"]').addEventListener('change', function() {
+            document.getElementById('industryOtherGroup').style.display = this.value === 'Autre' ? 'block' : 'none';
+        });
+
+        document.querySelector('select[name="erp_type"]').addEventListener('change', function() {
+            document.getElementById('erpOtherGroup').style.display = this.value === 'Autre' ? 'block' : 'none';
+        });
+
+        document.querySelector('select[name="pain_point"]').addEventListener('change', function() {
+            document.getElementById('painOtherGroup').style.display = this.value === 'Autre' ? 'block' : 'none';
+        });
+
+        // ERP Slider
+        const erpSlider = document.getElementById('erpSlider');
+        const erpValue = document.getElementById('erpValue');
+        const erpDescription = document.getElementById('erpDescription');
+
+        const erpDescriptions = {
+            1: "Très basique — Juste la compta",
+            2: "Très basique — Juste la compta",
+            3: "Basique — Quelques modules",
+            4: "Basique — Quelques modules",
+            5: "Partiel — Plusieurs modules, Excel à côté",
+            6: "Partiel — Plusieurs modules, Excel à côté",
+            7: "Avancé — La plupart des flux passent par l'ERP",
+            8: "Avancé — La plupart des flux passent par l'ERP",
+            9: "Cockpit central — Tout est intégré",
+            10: "Cockpit central — Tout est intégré"
+        };
+
+        erpSlider.addEventListener('input', function() {
+            erpValue.textContent = this.value;
+            erpDescription.textContent = erpDescriptions[this.value];
+        });
+
+        // Checkboxes tools
+        const checkboxItems = document.querySelectorAll('.checkbox-item');
+        checkboxItems.forEach(item => {
+            item.addEventListener('click', function() {
+                const checkbox = this.querySelector('input[type="checkbox"]');
+                checkbox.checked = !checkbox.checked;
+                this.classList.toggle('selected', checkbox.checked);
+                updateToolsCount();
+            });
+        });
+
+        function updateToolsCount() {
+            const checked = document.querySelectorAll('.checkbox-item.selected').length;
+            const countEl = document.getElementById('toolsCount');
+            let label = "Écosystème centralisé";
+            if (checked >= 3 && checked <= 5) label = "Fragmentation modérée";
+            else if (checked >= 6 && checked <= 8) label = "Fragmentation significative";
+            else if (checked > 8) label = "Archipel d'outils — Risque élevé";
+            
+            countEl.innerHTML = "<strong>" + (checked + 1) + "</strong> outil(s) (ERP + " + checked + " satellites) — " + label;
+        }
+
+        // Form submission
+        document.getElementById('auditForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+
+            // HONEYPOT CHECK - Si rempli, c'est un bot
+            const honeypot = document.getElementById('website').value;
+            if (honeypot !== '') {
+                console.log('Bot detected');
+                // Simuler un succès pour ne pas alerter le bot
+                document.querySelectorAll('.step').forEach(s => s.classList.remove('active'));
+                document.getElementById('success').classList.add('active');
+                return;
+            }
+
+            if (!validateStep(currentStep)) return;
+
+            // Hide form, show loading
+            document.querySelectorAll('.step').forEach(s => s.classList.remove('active'));
+            document.getElementById('loading').classList.add('active');
+
+            // Prepare data
+            const formData = new FormData(this);
+            const data = {};
+
+            // Handle checkboxes (tools_used)
+            const toolsUsed = [];
+            document.querySelectorAll('input[name="tools_used"]:checked').forEach(cb => {
+                toolsUsed.push(cb.value);
+            });
+            
+            formData.forEach((value, key) => {
+                if (key !== 'tools_used' && key !== 'website') {
+                    data[key] = value;
+                }
+            });
+            
+            data.tools_used = toolsUsed;
+            data.submitted_at = new Date().toISOString();
+
+            // Handle "Autre" fields
+            if (data.industry === 'Autre' && data.industry_other) {
+                data.industry = 'Autre: ' + data.industry_other;
+            }
+            if (data.erp_type === 'Autre' && data.erp_other) {
+                data.erp_type = 'Autre: ' + data.erp_other;
+            }
+            if (data.pain_point === 'Autre' && data.pain_point_other) {
+                data.pain_point = 'Autre: ' + data.pain_point_other;
+            }
+
+            try {
+                const response = await fetch('https://kanso-client1-u62809.vm.elestio.app/webhook/1f34c99e-183d-46a4-a187-053e36bfbcd8', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(data)
+                });
+
+                document.getElementById('loading').classList.remove('active');
+                document.getElementById('success').classList.add('active');
+            } catch (error) {
+                console.error('Error:', error);
+                alert("Une erreur est survenue. Veuillez réessayer.");
+                document.getElementById('loading').classList.remove('active');
+                document.querySelector("[data-step='" + currentStep + "']").classList.add('active');
+            }
+        });
+    </script>
+</body>
+</html>
