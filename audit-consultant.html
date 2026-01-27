@@ -1131,16 +1131,12 @@
                     <div class="form-group">
                         <label>Process le plus douloureux <span class="required">*</span></label>
                         <select name="pain_point" required>
-                            <option value="">Sélectionnez...</option>
-                            <option value="Traitement des factures">Traitement des factures / Rapprochement</option>
-                            <option value="Gestion des litiges">Gestion des litiges fournisseurs</option>
-                            <option value="Suivi des délais de livraison">Suivi des délais / Relances</option>
-                            <option value="Onboarding fournisseurs">Onboarding fournisseurs</option>
-                            <option value="Mise à jour données fournisseurs">Mise à jour données fournisseurs</option>
-                            <option value="Recherche de nouveaux fournisseurs">Sourcing fournisseurs</option>
-                            <option value="Reporting et consolidation">Reporting / Consolidation</option>
-                            <option value="Conformité et audits">Conformité / Audits</option>
-                            <option value="Autre">Autre</option>
+                            <option value="">-- Sélectionnez le processus prioritaire --</option>
+                            <option value="sales_order">SAISIE COMMANDES CLIENTS (Perte de temps ADV)</option>
+                            <option value="finance_invoice">LITIGES PRIX & FACTURES (Perte de marge)</option>
+                            <option value="supply_arc">RELANCE FOURNISSEURS & DÉLAIS (Risque Rupture)</option>
+                            <option value="quality_doc">QUALITÉ / CERTIFICATS MATIÈRE (Blocage libération)</option>
+                            <option value="other_custom">AUTRE PROCESSUS ADMINISTRATIF (Spécifique)</option>
                         </select>
                     </div>
 
