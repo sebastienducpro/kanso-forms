@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Audit Kanso 360 - Entretien Client</title>
+    <title>Audit Kanso 360 - Entretien Client v5</title>
     <link rel="icon" type="image/png" href="favicon.png">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <style>
@@ -1049,7 +1049,7 @@
                     </div>
 
                     <div class="context-box">
-                        <strong>💰 Calcul ROI :</strong> Équipe × Heures/jour × Taux horaire × 235 jours = Coût annuel. Chaque heure compte !
+                        <strong>💰 Calcul ROI :</strong> Équipe × Heures/jour × Taux horaire (ci-dessous) × 235 jours = Coût annuel. Chaque heure compte !
                     </div>
 
                     <div class="form-row-3">
@@ -1098,6 +1098,23 @@
                             <option value="Partielle — Quelques doublons/obsolètes">Partielle — Doublons et données obsolètes</option>
                             <option value="Non maîtrisée — Chacun son Excel">Non maîtrisée — Chacun son Excel</option>
                         </select>
+                    </div>
+
+                    <!-- TAUX HORAIRE SLIDER - v5 -->
+                    <div class="form-group">
+                        <label>Coût horaire chargé moyen de l'équipe <span class="required">*</span></label>
+                        <p style="font-size: 0.8rem; color: var(--gris-text); margin-bottom: 12px; margin-top: -8px;">
+                            Estimation du coût employeur par heure (salaire brut + charges). En cas de doute, 38€ est une moyenne réaliste pour un profil administratif.
+                        </p>
+                        <div class="slider-container">
+                            <div class="slider-labels">
+                                <span>25€<br>(Junior)</span>
+                                <span>60€<br>(Direction)</span>
+                            </div>
+                            <input type="range" id="tauxHoraireSlider" name="taux_horaire" min="25" max="60" value="38" step="1" required>
+                            <div class="slider-value"><span id="tauxHoraireValue">38</span>€/h</div>
+                            <div class="slider-description" id="tauxHoraireDescription">Profil administratif standard</div>
+                        </div>
                     </div>
 
                     <hr class="section-divider">
@@ -1318,6 +1335,26 @@
         erpSlider.addEventListener('input', function() {
             erpValue.textContent = this.value;
             erpDescription.textContent = erpDescriptions[this.value];
+        });
+
+        // Taux Horaire Slider - v5
+        const tauxHoraireSlider = document.getElementById('tauxHoraireSlider');
+        const tauxHoraireValue = document.getElementById('tauxHoraireValue');
+        const tauxHoraireDescription = document.getElementById('tauxHoraireDescription');
+
+        const getTauxDescription = (taux) => {
+            if (taux < 30) return "Assistant / Profil junior";
+            if (taux < 35) return "Employé administratif";
+            if (taux < 40) return "Profil administratif standard";
+            if (taux < 45) return "Technicien / Gestionnaire";
+            if (taux < 50) return "Cadre / Responsable";
+            if (taux < 55) return "Cadre confirmé";
+            return "Direction / Profil senior";
+        };
+
+        tauxHoraireSlider.addEventListener('input', function() {
+            tauxHoraireValue.textContent = this.value;
+            tauxHoraireDescription.textContent = getTauxDescription(parseInt(this.value));
         });
 
         // Checkboxes tools
