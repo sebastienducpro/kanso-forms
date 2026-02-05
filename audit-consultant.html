@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Audit Kanso 360 - Entretien Client v8</title>
+    <title>Audit Kanso 360 - Entretien Client v9</title>
     <link rel="icon" type="image/png" href="favicon.png">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <style>
@@ -536,14 +536,14 @@
             display: block;
         }
 
-        /* Loading & Success */
-        .loading, .success-message {
+        /* Loading & Success & Error */
+        .loading, .success-message, .error-message-box {
             display: none;
             text-align: center;
             padding: 40px;
         }
 
-        .loading.active, .success-message.active {
+        .loading.active, .success-message.active, .error-message-box.active {
             display: block;
         }
 
@@ -573,6 +573,18 @@
             font-size: 2rem;
         }
 
+        .error-icon {
+            width: 80px;
+            height: 80px;
+            background: var(--rouge);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 20px;
+            font-size: 2rem;
+        }
+
         .success-message h2 {
             color: var(--blanc);
             margin-bottom: 12px;
@@ -580,6 +592,45 @@
 
         .success-message p {
             color: var(--gris-text);
+        }
+
+        .error-message-box h2 {
+            color: var(--rouge);
+            margin-bottom: 12px;
+        }
+
+        /* ROI Breakdown */
+        .roi-breakdown {
+            background: var(--noir-input);
+            border-radius: 10px;
+            padding: 20px;
+            margin: 20px 0;
+            text-align: left;
+        }
+
+        .roi-line {
+            display: flex;
+            justify-content: space-between;
+            padding: 8px 0;
+            font-size: 0.95rem;
+            color: var(--gris-text);
+        }
+
+        .roi-line.total {
+            border-top: 1px solid var(--gris-border);
+            margin-top: 10px;
+            padding-top: 15px;
+            font-weight: 600;
+            color: var(--blanc);
+        }
+
+        .roi-line .value {
+            color: var(--vert);
+            font-weight: 500;
+        }
+
+        .roi-line.total .value {
+            font-size: 1.2rem;
         }
 
         /* Quick Stats Preview */
@@ -1049,24 +1100,26 @@
                     </div>
 
                     <div class="context-box">
-                        <strong>💰 Calcul ROI :</strong> Équipe × Heures/jour × Taux horaire (ci-dessous) × 235 jours = Coût annuel. Chaque heure compte !
+                        <strong>💰 Calcul ROI :</strong> Équipe × Heures/jour × Taux horaire × 235 jours + Coût non-qualité data = Coût annuel total
                     </div>
 
                     <div class="form-row-3">
                         <div class="form-group">
                             <label>Taille équipe impactée <span class="required">*</span></label>
+                            <!-- v9: Valeurs = moyennes des fourchettes -->
                             <select name="team_size" required>
                                 <option value="">Sélectionnez...</option>
                                 <option value="1">1 personne</option>
                                 <option value="2">2 personnes</option>
-                                <option value="3">3-5 personnes</option>
-                                <option value="7">6-10 personnes</option>
+                                <option value="4">3-5 personnes</option>
+                                <option value="8">6-10 personnes</option>
                                 <option value="15">11-20 personnes</option>
-                                <option value="25">20+ personnes</option>
+                                <option value="30">20+ personnes</option>
                             </select>
                         </div>
                         <div class="form-group">
                             <label>Temps admin / JOUR <span class="required">*</span></label>
+                            <!-- v9: Valeurs numériques directes -->
                             <select name="hours_lost" required>
                                 <option value="">Sélectionnez...</option>
                                 <option value="0.5">< 30 min</option>
@@ -1080,8 +1133,8 @@
                             <label>Nb fournisseurs actifs <span class="required">*</span></label>
                             <select name="data_volume" required>
                                 <option value="">Sélectionnez...</option>
-                                <option value="50">< 50</option>
-                                <option value="100">50-100</option>
+                                <option value="25">< 50</option>
+                                <option value="75">50-100</option>
                                 <option value="300">100-500</option>
                                 <option value="750">500-1000</option>
                                 <option value="1500">1000-2000</option>
@@ -1094,26 +1147,26 @@
                         <label>Fiabilité de la base fournisseurs <span class="required">*</span></label>
                         <select name="data_confidence" required>
                             <option value="">Sélectionnez...</option>
-                            <option value="Fiable — Référentiel unique et à jour">Fiable — Référentiel unique et à jour</option>
-                            <option value="Partielle — Quelques doublons/obsolètes">Partielle — Doublons et données obsolètes</option>
-                            <option value="Non maîtrisée — Chacun son Excel">Non maîtrisée — Chacun son Excel</option>
+                            <option value="fiable">Fiable — Référentiel unique et à jour</option>
+                            <option value="partielle">Partielle — Doublons et données obsolètes</option>
+                            <option value="non_maitrisee">Non maîtrisée — Chacun son Excel</option>
                         </select>
                     </div>
 
-                    <!-- TAUX HORAIRE SLIDER - v5 -->
+                    <!-- TAUX HORAIRE SLIDER -->
                     <div class="form-group">
                         <label>Coût horaire chargé moyen de l'équipe <span class="required">*</span></label>
                         <p style="font-size: 0.8rem; color: var(--gris-text); margin-bottom: 12px; margin-top: -8px;">
-                            Estimation du coût employeur par heure (salaire brut + charges). En cas de doute, 38€ est une moyenne réaliste pour un profil administratif.
+                            Estimation du coût employeur par heure (salaire brut + charges). En cas de doute, 41€ est une moyenne réaliste pour un profil technicien/gestionnaire.
                         </p>
                         <div class="slider-container">
                             <div class="slider-labels">
                                 <span>25€<br>(Junior)</span>
                                 <span>60€<br>(Direction)</span>
                             </div>
-                            <input type="range" id="tauxHoraireSlider" name="taux_horaire" min="25" max="60" value="38" step="1" required>
-                            <div class="slider-value"><span id="tauxHoraireValue">38</span>€/h</div>
-                            <div class="slider-description" id="tauxHoraireDescription">Profil administratif standard</div>
+                            <input type="range" id="tauxHoraireSlider" name="taux_horaire" min="25" max="60" value="41" step="1" required>
+                            <div class="slider-value"><span id="tauxHoraireValue">41</span>€/h</div>
+                            <div class="slider-description" id="tauxHoraireDescription">Technicien / Gestionnaire</div>
                         </div>
                     </div>
 
@@ -1258,10 +1311,34 @@
                 <div class="success-message" id="success">
                     <div class="success-icon">✓</div>
                     <h2>Merci pour votre temps !</h2>
-                    <p style="font-size: 1.1rem; color: var(--gris-text); margin-bottom: 10px;">Potentiel de productivité identifié :</p>
-                    <p style="font-size: 3rem; font-weight: 700; color: var(--vert); margin: 15px 0;"><span id="roiAmount">0</span> € <span style="font-size: 1.2rem; font-weight: 400; color: var(--gris-text);">/an</span></p>
+                    <p style="font-size: 1.1rem; color: var(--gris-text); margin-bottom: 10px;">Coût annuel identifié :</p>
+                    
+                    <!-- v9: Détail du calcul ROI -->
+                    <div class="roi-breakdown">
+                        <div class="roi-line">
+                            <span>Coût de productivité perdue</span>
+                            <span class="value" id="roiProductivite">0 €</span>
+                        </div>
+                        <div class="roi-line">
+                            <span>Coût de non-qualité data</span>
+                            <span class="value" id="roiNonQualite">0 €</span>
+                        </div>
+                        <div class="roi-line total">
+                            <span>TOTAL RÉCUPÉRABLE</span>
+                            <span class="value" id="roiTotal">0 €</span>
+                        </div>
+                    </div>
+                    
                     <p style="margin-top: 30px; color: var(--gris-text);">Le rapport PDF personnalisé vous sera remis sous <strong style="color: var(--blanc);">24h</strong>.</p>
                     <p style="margin-top: 15px; color: var(--vert); font-size: 1.1rem;">📧 <span id="clientEmail"></span></p>
+                </div>
+
+                <!-- Error -->
+                <div class="error-message-box" id="errorBox">
+                    <div class="error-icon">✗</div>
+                    <h2>Erreur d'envoi</h2>
+                    <p style="color: var(--gris-text); margin-bottom: 20px;">Les données n'ont pas pu être transmises. Vérifiez votre connexion et réessayez.</p>
+                    <button type="button" class="btn btn-primary" onclick="retrySubmit()" style="max-width: 300px; margin: 0 auto;">Réessayer →</button>
                 </div>
 
             </form>
@@ -1271,6 +1348,7 @@
     <script>
         let currentStep = 1;
         const totalSteps = 7;
+        let lastFormData = null; // Pour le retry
 
         function nextStep() {
             if (!validateStep(currentStep)) return;
@@ -1340,7 +1418,7 @@
             erpDescription.textContent = erpDescriptions[this.value];
         });
 
-        // Taux Horaire Slider - v5
+        // Taux Horaire Slider
         const tauxHoraireSlider = document.getElementById('tauxHoraireSlider');
         const tauxHoraireValue = document.getElementById('tauxHoraireValue');
         const tauxHoraireDescription = document.getElementById('tauxHoraireDescription');
@@ -1393,15 +1471,98 @@
             countEl.innerHTML = "<strong>" + total + "</strong> outil" + (total > 1 ? "s" : "") + " (ERP + " + checked + " satellites)<span class='risk-label " + riskClass + "'>" + riskText + "</span>";
         }
 
+        // ============================================================
+        // 🔧 v9: Calcul ROI complet (identique au PDF)
+        // ============================================================
+        function calculateROI(data) {
+            // 1. Coût de productivité perdue
+            // Formule: team × hours × taux × 235 jours
+            const teamSize = parseInt(data.team_size) || 1;
+            const dailyHours = parseFloat(data.hours_lost) || 1;
+            const tauxHoraire = parseInt(data.taux_horaire) || 41;
+            const coutProductivite = Math.round(teamSize * dailyHours * 235 * tauxHoraire);
+
+            // 2. Coût de non-qualité data
+            // Formule: fournisseurs × 10€ × facteur_risque
+            const dataVolume = parseInt(data.data_volume) || 100;
+            const dataConfidence = data.data_confidence || 'partielle';
+            
+            let riskFactor = 0.5; // Par défaut "Partielle"
+            if (dataConfidence === 'fiable') riskFactor = 0.2;
+            if (dataConfidence === 'non_maitrisee') riskFactor = 1.0;
+            
+            const coutNonQualite = Math.round(dataVolume * 10 * riskFactor);
+
+            // 3. Total
+            const total = coutProductivite + coutNonQualite;
+
+            // Debug log
+            console.log('[ROI v9] Productivité:', teamSize, '×', dailyHours, 'h ×', tauxHoraire, '€ × 235j =', coutProductivite, '€');
+            console.log('[ROI v9] Non-qualité:', dataVolume, 'fournisseurs × 10€ ×', riskFactor, '=', coutNonQualite, '€');
+            console.log('[ROI v9] TOTAL:', total, '€');
+
+            return {
+                productivite: coutProductivite,
+                nonQualite: coutNonQualite,
+                total: total
+            };
+        }
+
+        // ============================================================
+        // 🔧 v9: Gestion d'erreur améliorée
+        // ============================================================
+        async function submitData(data) {
+            const response = await fetch('https://kanso-client1-u62809.vm.elestio.app/webhook/48b9776e-cd0d-472d-8b66-c01fa567cce2', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(data)
+            });
+            
+            if (!response.ok) {
+                throw new Error('HTTP ' + response.status);
+            }
+            
+            return response;
+        }
+
+        function showSuccess(data) {
+            const roi = calculateROI(data);
+            
+            document.getElementById('loading').classList.remove('active');
+            document.getElementById('errorBox').classList.remove('active');
+            document.getElementById('success').classList.add('active');
+            
+            document.getElementById('clientEmail').textContent = data.email;
+            document.getElementById('roiProductivite').textContent = roi.productivite.toLocaleString('fr-FR') + ' €';
+            document.getElementById('roiNonQualite').textContent = roi.nonQualite.toLocaleString('fr-FR') + ' €';
+            document.getElementById('roiTotal').textContent = roi.total.toLocaleString('fr-FR') + ' €/an';
+        }
+
+        function showError() {
+            document.getElementById('loading').classList.remove('active');
+            document.getElementById('success').classList.remove('active');
+            document.getElementById('errorBox').classList.add('active');
+        }
+
+        function retrySubmit() {
+            if (lastFormData) {
+                document.getElementById('errorBox').classList.remove('active');
+                document.getElementById('loading').classList.add('active');
+                
+                submitData(lastFormData)
+                    .then(() => showSuccess(lastFormData))
+                    .catch(() => showError());
+            }
+        }
+
         // Form submission
         document.getElementById('auditForm').addEventListener('submit', async function(e) {
             e.preventDefault();
 
-            // HONEYPOT CHECK - Si rempli, c'est un bot
+            // HONEYPOT CHECK
             const honeypot = document.getElementById('website').value;
             if (honeypot !== '') {
                 console.log('Bot detected');
-                // Simuler un succès pour ne pas alerter le bot
                 document.querySelectorAll('.step').forEach(s => s.classList.remove('active'));
                 document.getElementById('success').classList.add('active');
                 return;
@@ -1429,40 +1590,18 @@
             
             data.tools_used = toolsUsed;
             data.submitted_at = new Date().toISOString();
+            
+            // Stocker pour retry éventuel
+            lastFormData = data;
 
-            // Envoyer les données sans bloquer
-            fetch('https://kanso-client1-u62809.vm.elestio.app/webhook/48b9776e-cd0d-472d-8b66-c01fa567cce2', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(data)
-            }).catch(error => console.log('Envoi en cours...', error));
-
-            // Afficher succès après 2 secondes
-            setTimeout(() => {
-                // ============================================================
-                // 🔧 FIX v8: Calcul ROI corrigé
-                // ============================================================
-                // AVANT (BUG): const dailyHours = parseFloat(data.daily_hours) || 1;
-                //              → data.daily_hours n'existe pas, le champ s'appelle hours_lost
-                //              → parseFloat(undefined) = NaN → fallback à 1 systématiquement
-                //
-                // APRÈS (CORRIGÉ): Utilise data.hours_lost qui contient maintenant
-                //                  directement la valeur numérique (0.5, 1, 2, 3.5, 5)
-                // ============================================================
-                
-                const teamSize = parseInt(data.team_size) || 1;
-                const dailyHours = parseFloat(data.hours_lost) || 1;  // ✅ CORRIGÉ: hours_lost au lieu de daily_hours
-                const tauxHoraire = parseInt(data.taux_horaire) || 38;
-                const roiTotal = Math.round(teamSize * dailyHours * 235 * tauxHoraire);
-                
-                // Debug log (visible uniquement en console développeur)
-                console.log('[ROI Calc] team:', teamSize, '× hours:', dailyHours, '× 235 × taux:', tauxHoraire, '=', roiTotal);
-                
-                document.getElementById('loading').classList.remove('active');
-                document.getElementById('success').classList.add('active');
-                document.getElementById('clientEmail').textContent = data.email;
-                document.getElementById('roiAmount').textContent = roiTotal.toLocaleString('fr-FR');
-            }, 2000);
+            // v9: Attendre la réponse du webhook
+            try {
+                await submitData(data);
+                showSuccess(data);
+            } catch (error) {
+                console.error('[Audit] Erreur envoi:', error);
+                showError();
+            }
         });
 
         // Cookie Banner Management
@@ -1471,7 +1610,6 @@
             document.getElementById('cookieBanner').classList.add('hidden');
         }
 
-        // Check if cookies already accepted
         if (localStorage.getItem('kanso_cookies_accepted') === 'true') {
             document.getElementById('cookieBanner').classList.add('hidden');
         }
