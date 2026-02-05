@@ -1256,9 +1256,11 @@
                 <!-- Success -->
                 <div class="success-message" id="success">
                     <div class="success-icon">✓</div>
-                    <h2>Diagnostic généré !</h2>
-                    <p>Le rapport PDF a été envoyé au client et archivé dans le dossier Client.</p>
-                    <p style="margin-top: 15px; color: var(--vert);">📧 Email envoyé à <span id="clientEmail"></span></p>
+                    <h2>Merci pour votre temps !</h2>
+                    <p style="font-size: 1.1rem; color: var(--gris-text); margin-bottom: 10px;">Potentiel de productivité identifié :</p>
+                    <p style="font-size: 3rem; font-weight: 700; color: var(--vert); margin: 15px 0;"><span id="roiAmount">0</span> € <span style="font-size: 1.2rem; font-weight: 400; color: var(--gris-text);">/an</span></p>
+                    <p style="margin-top: 30px; color: var(--gris-text);">Le rapport PDF personnalisé vous sera remis sous <strong style="color: var(--blanc);">24h</strong>.</p>
+                    <p style="margin-top: 15px; color: var(--vert); font-size: 1.1rem;">📧 <span id="clientEmail"></span></p>
                 </div>
 
             </form>
@@ -1436,9 +1438,16 @@
 
             // Afficher succès après 2 secondes
             setTimeout(() => {
+                // Calculer le ROI
+                const teamSize = parseInt(data.team_size) || 1;
+                const dailyHours = parseFloat(data.daily_hours) || 1;
+                const tauxHoraire = parseInt(data.taux_horaire) || 38;
+                const roiTotal = Math.round(teamSize * dailyHours * 235 * tauxHoraire);
+                
                 document.getElementById('loading').classList.remove('active');
                 document.getElementById('success').classList.add('active');
                 document.getElementById('clientEmail').textContent = data.email;
+                document.getElementById('roiAmount').textContent = roiTotal.toLocaleString('fr-FR');
             }, 2000);
         });
 
