@@ -724,9 +724,6 @@
             document.getElementById('roiNonQualite').textContent = roi.nonQualite.toLocaleString('fr-FR') + ' €';
             document.getElementById('roiTotal').textContent = roi.total.toLocaleString('fr-FR') + ' €/an';
             const d = roi.debug;
-            document.getElementById('calculDetail').innerHTML = 
-                'Productivité: ' + d.teamSize + ' × ' + d.dailyHours + 'h × ' + d.tauxHoraire + '€ × 235j = ' + roi.productivite.toLocaleString('fr-FR') + '€<br>' +
-                'Non-qualité: ' + d.dataVolume + ' × 10€ × ' + d.riskFactor + ' = ' + roi.nonQualite.toLocaleString('fr-FR') + '€';
         }
 
         function showError() {
