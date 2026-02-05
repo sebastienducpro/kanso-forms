@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Audit Kanso 360 - Entretien Client v5</title>
+    <title>Audit Kanso 360 - Entretien Client v8</title>
     <link rel="icon" type="image/png" href="favicon.png">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <style>
@@ -853,7 +853,7 @@
                         <select name="role" required>
                             <option value="">Sélectionnez...</option>
                             <option value="Direction Générale">Direction Générale / CEO / COO</option>
-                            <option value="Finance / DAF">Finance / DAF / Comptabilité</option>
+                            <option value="Directeur Financier">Finance / DAF / Comptabilité</option>
                             <option value="Achats / Supply Chain">Achats / Supply Chain / Procurement</option>
                             <option value="Tech / DSI">Tech / DSI / IT</option>
                             <option value="Autre">Autre</option>
@@ -1069,11 +1069,11 @@
                             <label>Temps admin / JOUR <span class="required">*</span></label>
                             <select name="hours_lost" required>
                                 <option value="">Sélectionnez...</option>
-                                <option value="< 30 min (ponctuel)">< 30 min</option>
-                                <option value="~1h (quotidien léger)">~1h</option>
-                                <option value="~2h (quotidien significatif)">~2h</option>
-                                <option value="3-4h (demi-journée)">3-4h</option>
-                                <option value="> 4h (quasi temps plein)">> 4h</option>
+                                <option value="0.5">< 30 min</option>
+                                <option value="1">~1h</option>
+                                <option value="2">~2h</option>
+                                <option value="3.5">3-4h</option>
+                                <option value="5">> 4h</option>
                             </select>
                         </div>
                         <div class="form-group">
@@ -1200,44 +1200,45 @@
                             <label>Timeline <span class="required">*</span></label>
                             <select name="timeline" required>
                                 <option value="">Sélectionnez...</option>
-                                <option value="C'était pour hier">Urgence absolue</option>
-                                <option value="Ce trimestre">Ce trimestre</option>
-                                <option value="Cette année — réflexion en cours">Cette année</option>
-                                <option value="Je me renseigne pour plus tard">Plus tard / Veille</option>
+                                <option value="Immédiat (< 1 mois)">Immédiat (< 1 mois)</option>
+                                <option value="Court terme (1-3 mois)">Court terme (1-3 mois)</option>
+                                <option value="Moyen terme (3-6 mois)">Moyen terme (3-6 mois)</option>
+                                <option value="Long terme (6+ mois)">Long terme (6+ mois)</option>
+                                <option value="Exploration / Pas de deadline">Exploration</option>
                             </select>
                         </div>
                         <div class="form-group">
-                            <label>Budget indicatif</label>
-                            <select name="budget">
-                                <option value="">Non défini</option>
-                                <option value="< 5K€">< 5K€</option>
-                                <option value="5-15K€">5-15K€</option>
-                                <option value="15-30K€">15-30K€</option>
-                                <option value="30-50K€">30-50K€</option>
-                                <option value="> 50K€">> 50K€</option>
+                            <label>Niveau de décision <span class="required">*</span></label>
+                            <select name="decision_level" required>
+                                <option value="">Sélectionnez...</option>
+                                <option value="Décideur final">Décideur final</option>
+                                <option value="Influence forte">Influence forte</option>
+                                <option value="Prescripteur">Prescripteur / Évaluateur</option>
+                                <option value="Explorateur">Explorateur / Veille</option>
                             </select>
                         </div>
                     </div>
 
                     <div class="form-group">
-                        <label>Autres décideurs impliqués</label>
-                        <input type="text" name="other_stakeholders" placeholder="Ex: DAF (validation budget), DSI (validation tech), DG (sponsor)">
-                    </div>
-
-                    <div class="form-group">
-                        <label>Prochaines étapes convenues</label>
-                        <textarea name="next_steps" placeholder="Ex: Envoi du rapport sous 24h. Call de restitution vendredi 14h. Démo Litige Killer si intérêt confirmé..."></textarea>
+                        <label>Prochaine étape souhaitée</label>
+                        <select name="next_step">
+                            <option value="">Sélectionnez...</option>
+                            <option value="Démo personnalisée">Démo personnalisée sur leurs données</option>
+                            <option value="Proposition commerciale">Proposition commerciale</option>
+                            <option value="RDV avec décideur">RDV avec le décideur</option>
+                            <option value="POC / Pilote">POC / Pilote sur un périmètre réduit</option>
+                            <option value="Documentation">Envoi de documentation</option>
+                            <option value="Recontact ultérieur">Recontact dans X mois</option>
+                        </select>
                     </div>
 
                     <hr class="section-divider">
 
                     <div class="form-group">
-                        <label class="notes-label">Notes finales & impression générale</label>
-                        <textarea class="notes" name="notes_final" placeholder="Ex: Lead très qualifié, douleur réelle et budget présent. Attention : DSI réticent, à convaincre. Point de blocage = RGPD (prévoir argumentaire). Bon feeling avec Marie, en faire l'alliée interne..."></textarea>
+                        <label class="notes-label">Notes décision & next steps</label>
+                        <textarea class="notes" name="notes_decision" placeholder="Ex: Doit valider avec le DG la semaine prochaine. Budget IT = 50K€/an. Concurrent en discussion = UiPath mais trop cher. Rappeler mardi 14h..."></textarea>
                     </div>
 
-                    <!-- Hidden fields -->
-                    <input type="hidden" name="source" value="client">
                     <input type="hidden" name="submitted_at" id="submittedAt">
 
                     <div class="btn-container">
@@ -1438,11 +1439,24 @@
 
             // Afficher succès après 2 secondes
             setTimeout(() => {
-                // Calculer le ROI
+                // ============================================================
+                // 🔧 FIX v8: Calcul ROI corrigé
+                // ============================================================
+                // AVANT (BUG): const dailyHours = parseFloat(data.daily_hours) || 1;
+                //              → data.daily_hours n'existe pas, le champ s'appelle hours_lost
+                //              → parseFloat(undefined) = NaN → fallback à 1 systématiquement
+                //
+                // APRÈS (CORRIGÉ): Utilise data.hours_lost qui contient maintenant
+                //                  directement la valeur numérique (0.5, 1, 2, 3.5, 5)
+                // ============================================================
+                
                 const teamSize = parseInt(data.team_size) || 1;
-                const dailyHours = parseFloat(data.daily_hours) || 1;
+                const dailyHours = parseFloat(data.hours_lost) || 1;  // ✅ CORRIGÉ: hours_lost au lieu de daily_hours
                 const tauxHoraire = parseInt(data.taux_horaire) || 38;
                 const roiTotal = Math.round(teamSize * dailyHours * 235 * tauxHoraire);
+                
+                // Debug log (visible uniquement en console développeur)
+                console.log('[ROI Calc] team:', teamSize, '× hours:', dailyHours, '× 235 × taux:', tauxHoraire, '=', roiTotal);
                 
                 document.getElementById('loading').classList.remove('active');
                 document.getElementById('success').classList.add('active');
